@@ -4,7 +4,7 @@
 set -e
 [ -n "${DEBUG:-}" ] && set -x
 
-REPO="mattolenik/hclq"
+REPO="pycabbage/hclq"
 
 help() {
   cat <<EOF

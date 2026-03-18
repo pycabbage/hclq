@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Install gotestfmt
+        uses: GoTestTools/gotestfmt-action@v2
+        with:
+          version: v2.5.0
+
+      - name: Build
+        run: go build -ldflags="-s -w" -o dist/hclq .
+
+      - name: Test
+        run: |
+          set -euo pipefail
+          HCLQ_BIN=${{ github.workspace }}/dist/hclq \
+            go test -race -json -v ./... 2>&1 | \
+            tee /tmp/gotest.log | gotestfmt
+
+      - name: Test Report
+        uses: dorny/test-reporter@v2
+        if: always()
+        with:
+          name: Go Tests
+          path: /tmp/gotest.log
+          reporter: golang-json
+          fail-on-error: true
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: latest

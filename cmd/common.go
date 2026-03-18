@@ -3,7 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/mattolenik/hclq/config"
+	"github.com/pycabbage/hclq/config"
 	"io"
 	"os"
 	"strings"
