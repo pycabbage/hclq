@@ -4,4 +4,4 @@ dist/
 test/
 .vscode/
 /upx
-vendor/tools/bin
+vendor/

@@ -1,0 +1,68 @@
+version: 2
+
+project_name: hclq
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: hclq
+    binary: hclq
+    main: ./
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X github.com/pycabbage/hclq/cmd.version={{ .Version }}
+    goos:
+      - darwin
+      - linux
+      - windows
+      - freebsd
+      - openbsd
+      - solaris
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      # solaris does not support arm64
+      - goos: solaris
+        goarch: arm64
+
+archives:
+  - id: default
+    formats: [tar.gz]
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - LICENSE*
+      - README*
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - '^chore:'
+      - Merge pull request
+      - Merge branch
+
+release:
+  draft: false
+  prerelease: auto
+  name_template: "{{ .Tag }}"
+
+snapshot:
+  version_template: "{{ .Tag }}-next"

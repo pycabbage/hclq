@@ -39,11 +39,11 @@ less install.sh
 sh install.sh
 ```
 
-Or just download [install.sh](https://raw.githubusercontent.com/mattolenik/hclq/master/install.sh) right from the repo and run that.
+Or just download [install.sh](https://raw.githubusercontent.com/pycabbage/hclq/develop/install.sh) right from the repo and run that.
 
 ## Install with Go
 
-`go get -u github.com/mattolenik/hclq`
+`go get -u github.com/pycabbage/hclq`
 
 Keep in mind this will install whatever is on the `master` branch. A stable release is recommended unless you are doing development.
 
